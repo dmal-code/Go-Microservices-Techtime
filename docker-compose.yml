@@ -1,0 +1,75 @@
+version: '3.1'
+
+services:
+  go:
+    environment:
+      APP_ROLE: 'MASTER'
+    image: docker_go
+    volumes:
+      - ./data:/data
+    depends_on:
+      - messagebus
+    ports:
+      - 899:80
+      
+  go_slave1:
+    environment:
+      APP_ROLE: 'SLAVE'
+      NODE_NUMBER: '0'
+    image: docker_go
+    volumes:
+      - ./data:/data
+    depends_on:
+      - messagebus
+      
+  go_slave2:
+    environment:
+      APP_ROLE: 'SLAVE'
+      NODE_NUMBER: '1'
+    image: docker_go
+    volumes:
+      - ./data:/data
+    depends_on:
+      - messagebus
+      
+  go_slave3:
+    environment:
+      APP_ROLE: 'SLAVE'
+      NODE_NUMBER: '2'
+    image: docker_go
+    volumes:
+      - ./data:/data
+    depends_on:
+      - messagebus
+      
+  go_slave4:
+    environment:
+      APP_ROLE: 'SLAVE'
+      NODE_NUMBER: '3'
+    image: docker_go
+    volumes:
+      - ./data:/data
+    depends_on:
+      - messagebus
+      
+  go_slave5:
+    environment:
+      APP_ROLE: 'SLAVE'
+      NODE_NUMBER: '4'
+    image: docker_go
+    volumes:
+      - ./data:/data
+    depends_on:
+      - messagebus
+  
+  messagebus:
+    hostname: messagebus
+    environment:
+      CELERY_AMQP_TASK_RESULT_EXPIRES: 10800
+      JAVA_TOOL_OPTIONS: -Xmx256m
+      RABBITMQ_DEFAULT_PASS: secret
+      RABBITMQ_DEFAULT_USER: admin
+    image: rabbitmq:management
+    ports:
+      - 15672:15672
+    restart: unless-stopped
